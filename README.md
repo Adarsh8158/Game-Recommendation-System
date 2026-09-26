@@ -45,6 +45,12 @@ Top 12 genres bar chart + User Rating vs Metacritic scatter plot.
 
 ![Data Analytics](screenshots/03-analytics.png)
 
+### 4. ML Architecture
+
+Machine learning pipeline showing preprocessing, feature extraction, vectorization, cosine similarity, and recommendation flow.
+
+![ML Architecture](screenshots/04-ml-architecture.png)
+
 ## 🧠 How It Works
 
 ```
