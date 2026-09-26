@@ -28,22 +28,22 @@ The system analyzes game metadata (genres, developers, publishers, platforms) fr
 ## 📸 Screenshots
 
 ### 1. Game Recommender
+
 Search any game → get top similar recommendations with similarity %.
 
-![Game Recommender](screenshots/01-recommender.png)
+![Game Recommender](screenshots/1-recommender.png)
 
 ### 2. Explore & Filter Catalog
+
 Filter by keyword, genre, platform, Metacritic score + sort options.
 
+![Explore & Filter Catalog](screenshots/2-search.png)
+
 ### 3. Data Analytics
+
 Top 12 genres bar chart + User Rating vs Metacritic scatter plot.
 
-### 4. ML Architecture
-Full pipeline diagram + Cosine Similarity formula.
-
-> Add `02-explore.png`, `03-analytics.png`, `04-architecture.png` in `screenshots/` folder for complete gallery.
-
----
+![Data Analytics](screenshots/03-analytics.png)
 
 ## 🧠 How It Works
 
