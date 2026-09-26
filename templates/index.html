@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Game Recommendation & Analytics Engine</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+      <div class="hero-badge">⚡ Real-Time Vector Similarity Engine</div>
+      <h1>🎮 Video Game Recommendation & Analytics Engine</h1>
+      <p>Explore 15,000+ video games, perform multi-criteria filtering, view market analytics, and receive instant AI recommendations.</p>
+
+      <!-- PRESET CHIPS -->
+      <div class="preset-container">
+        <span class="preset-label">Try popular presets:</span>
+        <button class="preset-chip" data-game="The Witcher 3: Wild Hunt">⚔️ Witcher 3</button>
+        <button class="preset-chip" data-game="Cyberpunk 2077">🤖 Cyberpunk 2077</button>
+        <button class="preset-chip" data-game="Grand Theft Auto V">🚗 GTA V</button>
+        <button class="preset-chip" data-game="Portal 2">🌀 Portal 2</button>
+        <button class="preset-chip" data-game="God of War">🪓 God of War</button>
+        <button class="preset-chip" data-game="Red Dead Redemption 2">🤠 RDR 2</button>
+      </div>
+    </header>
+
+    <!-- METRICS STATS GRID -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="value" id="stat-total-games">15,000</div>
+        <div class="label">Analyzed Games Matrix</div>
+      </div>
+      <div class="metric-card">
+        <div class="value" id="stat-total-genres">22</div>
+        <div class="label">Unique Game Genres</div>
+      </div>
+      <div class="metric-card">
+        <div class="value" id="stat-avg-meta">75 / 100</div>
+        <div class="label">Avg Metacritic Score</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">5,000</div>
+        <div class="label">Vector Feature Tags</div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-recommender">🎮 Game Recommender</button>
+      <button class="tab-btn" data-tab="tab-explore">🔍 Explore & Filter Catalog</button>
+      <button class="tab-btn" data-tab="tab-analytics">📊 Data Analytics</button>
+      <button class="tab-btn" data-tab="tab-methodology">⚙️ ML Architecture</button>
+    </nav>
+
+    <!-- TAB 1: RECOMMENDER -->
+    <div id="tab-recommender" class="tab-content">
+      <section class="card-box">
+        <h3 class="section-title">🎯 Search Game & Generate Recommendations</h3>
+
+        <div class="search-panel">
+          <div class="input-group">
+            <input type="text" id="game-search-input" list="games-datalist" placeholder="Type or search any game title (e.g. Witcher, GTA, Portal)..." />
+            <datalist id="games-datalist"></datalist>
+          </div>
+          
+          <div class="control-row">
+            <div class="control-item">
+              <label for="slider-top-n">Recommendations Count: <b id="val-top-n">6</b></label>
+              <input type="range" id="slider-top-n" min="3" max="12" value="6" />
+            </div>
+            <div class="control-item">
+              <label for="slider-min-sim">Min Similarity Match: <b id="val-min-sim">25%</b></label>
+              <input type="range" id="slider-min-sim" min="0" max="90" value="25" step="5" />
+            </div>
+          </div>
+
+          <button id="btn-recommend" class="primary-btn">🚀 Recommend Similar Games</button>
+        </div>
+
+        <!-- LOADER & ERROR -->
+        <div id="rec-loader" class="loader hidden">
+          <div class="spinner"></div>
+          <p>Calculating Cosine Similarity vectors...</p>
+        </div>
+        <div id="rec-error" class="error-box hidden"></div>
+
+        <!-- RECOMMENDATION RESULTS GRID -->
+        <div id="rec-results-container" class="hidden margin-top">
+          <h3 class="results-title">🌟 Recommended Games Similar to <span id="target-game-name" class="highlight-text"></span>:</h3>
+          <div id="recommendations-grid" class="two-col margin-top"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB 2: EXPLORE CATALOG -->
+    <div id="tab-explore" class="tab-content hidden">
+      <section class="card-box">
+        <h3 class="section-title">🔍 Interactive Game Catalog Multi-Filter</h3>
+
+        <div class="filter-bar">
+          <input type="text" id="explore-search" placeholder="🔍 Search keyword by name, developer, or genre..." />
+          <select id="filter-genre">
+            <option value="All Genres">All Genres</option>
+          </select>
+          <select id="filter-platform">
+            <option value="All Platforms">All Platforms</option>
+          </select>
+          <select id="filter-sort">
+            <option value="rating">Sort by Rating</option>
+            <option value="metacritic">Sort by Metacritic</option>
+            <option value="ratings_count">Sort by Popularity</option>
+            <option value="name">Sort by Name</option>
+          </select>
+          <div class="filter-slider-box">
+            <label>Min Metacritic: <b id="val-min-meta">50</b></label>
+            <input type="range" id="filter-min-meta" min="0" max="100" value="50" />
+          </div>
+        </div>
+
+        <div class="results-count-bar">
+          <span>Found <b id="explore-count">0</b> matching games</span>
+        </div>
+
+        <div id="explore-grid" class="two-col margin-top"></div>
+      </section>
+    </div>
+
+    <!-- TAB 3: DATA ANALYTICS -->
+    <div id="tab-analytics" class="tab-content hidden">
+      <div class="two-col">
+        <section class="card-box">
+          <h3 class="section-title">🏆 Top 12 Most Popular Game Genres</h3>
+          <div class="chart-box">
+            <canvas id="chart-genres"></canvas>
+          </div>
+        </section>
+
+        <section class="card-box">
+          <h3 class="section-title">🎯 User Rating vs Metacritic Correlation</h3>
+          <div class="chart-box">
+            <canvas id="chart-correlation"></canvas>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- TAB 4: ML METHODOLOGY -->
+    <div id="tab-methodology" class="tab-content hidden">
+      <section class="card-box">
+        <h3 class="section-title">⚙️ Machine Learning Pipeline & Mathematics</h3>
+
+        <div class="arch-box">
+          <pre>
+Data/game_info.csv (474,000+ Raw Records)
+                 │
+                 ▼
+     [preprocess.py] (Top 15,000 Games Selection)
+                 │
+                 ▼
+   [Feature Tag Extraction: Genres + Developers + Publishers + Platforms]
+                 │
+                 ▼
+    [CountVectorizer (5,000 Features) + Cosine Similarity Matrix]
+                 │
+                 ▼
+       model/processed_games.pkl & model/similarity.pkl
+                 │
+                 ▼
+     [app.py REST API] ──► [Interactive HTML5/CSS3/JS Web UI]
+          </pre>
+        </div>
+
+        <h4 style="color:var(--accent); margin-top:1.5rem;">📐 Cosine Similarity Formula</h4>
+        <p class="muted">The vector distance between two games A and B is computed as:</p>
+        <div class="math-box">
+          $$\text{Similarity}(A, B) = \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|}$$
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      Developed with ❤️ by <b>Adarsh Yadav</b> | Video Game Recommendation & Analytics Engine
+    </footer>
+
+  </div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
